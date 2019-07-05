@@ -1,6 +1,8 @@
 package com.vlad.SecondProject;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -10,21 +12,21 @@ public class Task10 {
 
     private Map<String, Long> sort = new HashMap<>();
 
-    private Task2 task2;
+    private List<Sentence> sentences = new ArrayList<>();
 
 
     public Task10(String text, String[] words) {
         this.words = words;
-        this.task2 = new Task2(text);
+        this.sentences.addAll(Stream.of(text.split("[.!?]")).map(s -> new Sentence(s.trim())).collect(Collectors.toList()));
         for (String word :
                 words) {
 
             long occurrence = 0;
 
             for (Sentence sentence :
-                    task2.getSentences()) {
-                System.out.println(sentence.getWords().stream().filter(word1 -> word.equals(word1.getWord())).count());
-                occurrence += sentence.getWords().stream().filter(word1 -> word.equals(word1.getWord())).count();
+                    sentences) {
+                System.out.println(sentence.getWords().stream().filter(word1 -> word.equals(word1.get())).count());
+                occurrence += sentence.getWords().stream().filter(word1 -> word.equals(word1.get())).count();
             }
             System.out.println("General number of occurs: " + occurrence);
             sort.put(word, occurrence);

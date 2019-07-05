@@ -1,35 +1,52 @@
 package com.vlad.SecondProject;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Task2 {
 
+    private List<PartOfLanguage> sentences = new ArrayList<>();
 
-    public List<Sentence> getSentences() {
+
+    public List<PartOfLanguage> getSentences() {
         return sentences;
     }
 
-    public void setSentences(List<Sentence> sentences) {
+    public void setSentences(List<PartOfLanguage> sentences) {
         this.sentences = sentences;
     }
 
-    private List<Sentence> sentences;
 
     public Task2(String text) {
+        text=text.replaceAll("\\s+", " ");
 
-        sentences = Stream.of(text.replaceAll("\\s+", " ").split("[.!?]")).map(s -> new Sentence(s.trim())).collect(Collectors.toList());
+        String sentence = "";
+        for (Character c :
+                text.toCharArray()) {
+            String c1 = c.toString();
+            sentence += c1;
+
+            if (c1.matches("[.!?]")){
+
+                System.out.println(sentence);
+            sentences.add(new Sentence(sentence.trim())); sentence="";
+            }
+        }
+
+
     }
 
 
-    public void  printSentences() {
-        sentences.stream().map(Sentence::getSentence).forEach(System.out::println);
+    public void printSentences() {
+        sentences.stream().map(PartOfLanguage::get).forEach(System.out::println);
 
     }
+
     public void printSorted() {
-        sentences.stream().sorted().map(Sentence::getSentence).forEach(System.out::println);
+        sentences.stream().sorted().map(PartOfLanguage::get).forEach(System.out::println);
 
     }
 }

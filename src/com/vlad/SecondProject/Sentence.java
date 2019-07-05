@@ -5,29 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Sentence implements Comparable<Sentence> {
+public class Sentence implements Comparable<Sentence>, PartOfLanguage {
 
     private String sentence;
-
-    public List<Word> getWords() {
-        return words;
-    }
-
-    public void setWords(List<Word> words) {
-        this.words = words;
-    }
-
-    private List<Word> words;
-
-    public Sentence(String sentence) {
-        this.sentence = sentence;
-        words= Stream.of(sentence.split("[ ]")).map(s -> new Word(s.trim())).collect(Collectors.toList());
-
-   }
-
-   public long getNumberOfOccurences(String word) {
-        return words.stream().filter(word1 -> word.equals(word1.getWord())).count();
-   }
 
     public String getSentence() {
         return sentence;
@@ -35,7 +15,37 @@ public class Sentence implements Comparable<Sentence> {
 
     public void setSentence(String sentence) {
         this.sentence = sentence;
+    }
 
+    public List<PartOfLanguage> getWords() {
+        return words;
+    }
+
+    public void setWords(List<PartOfLanguage> words) {
+        this.words = words;
+    }
+
+    private List<PartOfLanguage> words = new ArrayList<>();
+
+    public Sentence(String sentence) {
+        this.sentence = sentence;
+        List<Word> wordList = new ArrayList<>();
+        wordList = Stream.of(sentence.split(" "))
+                .map(word -> new Word(word.trim()))
+                .collect(Collectors.toList());
+        for (Word word :
+                wordList) {
+            if (word.get().matches("[.,;?!]")) {
+
+                words.add(new Word(word.get().substring(0, word.get().length() - 2)));
+                System.out.println(word.get().substring(word.get().length() - 2));
+                words.add(new DivSign(word.get().substring(word.get().length() - 2)));
+                System.out.println(word.get().substring(word.get().length() - 2));
+            }
+            else
+                words.add(new Word(word.get()));
+
+        }
 
     }
 
@@ -46,6 +56,11 @@ public class Sentence implements Comparable<Sentence> {
 
     @Override
     public int compareTo(Sentence o) {
-        return this.countWords()-o.countWords();
+        return this.countWords() - o.countWords();
+    }
+
+    @Override
+    public String get() {
+        return sentence;
     }
 }

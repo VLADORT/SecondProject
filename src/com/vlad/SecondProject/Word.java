@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Word {
+public class Word implements PartOfLanguage {
     private String word;
     
     private List<Sign> signs;
@@ -23,5 +23,10 @@ public class Word {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    @Override
+    public String get() {
+        return this.word;
     }
 }
